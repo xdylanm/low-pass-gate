@@ -13,10 +13,13 @@ In this structure, the gain $K$ is set by the resistor divider $R_3$ & $R_4$  in
 ![Sallen-Key Diagram](./images/sallen_key_lpf_K.png)
 
 The canonical transfer function for the LPF is 
+
 $$
 H_{LP}(s)=\frac{\omega_n^2}{s^2 + \left(\omega_n/Q\right)s+\omega_n^2}
 $$
+
 Deriving from the circuit
+
 $$
 \begin{align*}
 \left(1 + sC_gR_2\right) v_o &= v_x\\
@@ -29,7 +32,9 @@ $$
 \to Q = \frac{\sqrt{R_1 R_2 C_f C_g}}{R_1 C_g + R_2 C_g + R_1 C_f (1-K)},\quad \omega_n = \sqrt{\frac{1}{R_1 R_2 C_f C_g}}
 \end{align*}
 $$
+
 Following the Buchla low-pass gate design, we make the choice $R_1=R_2=R$ (where $R$ will be replaced by a vactrol for voltage control. Other choices include $C_f=C_g$ or both, which also reduces the complexity of the formulas. However, this choice decouples control over $Q$ (via feedback gain $K$ ) and $\omega_n$ (via $R$) and leaves some flexibility to bias $Q$ (if $C_f=C_g=C$, the value $C$ cancels in the expression for $Q$).
+
 $$
 \begin{align*}
 Q &= \frac{\sqrt{C_f C_g}}{2C_g + C_f(1-K)} \\
@@ -58,12 +63,14 @@ $C_2$ can be neglected (high cutoff LPF). In addition $R_6$ can be neglected rel
 ![Reduced filter stage](./images/filter_stage_reduced.png)
 
 With the VCF switch closed, the formulas for the Sallen-Key filter apply ( $R_5$ can be neglected: VCF and VCA cannot be closed simultaneously). 
+
 $$
 \begin{align*}
 \omega_n &= \frac{1}{R}\sqrt{\frac{1}{C_f C_g}} = \frac{4.61\times 10^8}{R} \\
 Q &= \frac{\sqrt{C_f C_g}}{2C_g + C_f(1-K)} = \frac{2.17}{2+4.7(1-K)}
 \end{align*}
 $$
+
 For $0 < Q < \infty$, $K < \frac{2C_g}{C_f} + 1 \simeq 1.4$, which suggests that $RV_1 < 40k\Omega$. When $R$ ranges from $1M\Omega$ to $<10k\Omega$, the cutoff frequency for the low-pass can be tuned between 70Hz and 7kHz. 
 
 When the VCA switch is closed, the VCF switch must be open and the feedback loop is broken. Now we have a resistor divider $2R$  and $R_5=10k\Omega$, which feeds a buffer. There is a modest low-pass effect from $C_4$, with $f_c = \frac{1}{2\pi (2R||R_5) C_g}$. When $R \gg R_5$, this reduces to $\sim 16kHz$, and for $R < R_5$ $f_c$ will be larger, so $C_4$ can be neglected. Consequently, the gain of the VCA can be approximated as $G=\frac{2R_5}{R_5+2R}$ (the factor of two comes from the input stage). This gives the "gate" behaviour: when $R \gg R_5$, the gain $G\to 0$. This condition occurs when the input CV signal is low. Increasing the CV input reduces $R$, ideally resulting in near unity gain. 
@@ -103,18 +110,12 @@ Another interesting feature in \[[4](#bergman-35),[5](#natrhythm)\] is the input
 ![CV input filter](./images/lpg_input_filter.png)
 
 $V_n$ is the virtual ground at the inverting terminal of the opamp, so the current that is directed to the branch with the vactrols will be the sum of the currents in the two branches shown in the circuit above:
+
 $$
 I_n = V_i\left(\frac{1}{R_1 + \frac{1}{sC_1}} + \frac{1}{R_2}\right)=V_i\left(\frac{sC_1(R_1 + R_2) + 1}{sR_1R_2 C_1 + R_2} \right)
 $$
+
 At low frequencies ($s\to 0$) this reduces to an impedance of $R_2=100k\Omega$ and at high frequencies ($s\to \infty$) it reduces to $R_1\parallel R_2 \simeq 82k\Omega$ with a corner frequency around $170Hz$. This should give a bit of a "pluck" to the filter, briefly opening it a bit more on faster signals.
-
-
-
-
-
-
-
-
 
 ## References
 
