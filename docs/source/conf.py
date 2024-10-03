@@ -14,7 +14,7 @@ author = 'Author'
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = ["myst_parser"]
-myst_enable_extensions = ["dollarmath"]
+myst_enable_extensions = ["dollarmath", "amsmath"]
 
 templates_path = ['_templates']
 exclude_patterns = []
