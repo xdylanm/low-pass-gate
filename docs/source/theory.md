@@ -84,13 +84,29 @@ The opamp is configured as an inverting amplifier: the inverting input is a virt
 
 ![Simplified vactrol drive circuit](./images/vactrol_drive_simplified.png)
 
-A current $i_n$ flows through $R_1$ such that $v_x = -i_n R_1$ (it will be limited to $v_x \geq -3.9V$ by the Zener diode). $R_2$ will then have current $i_2 = i_n\frac{R_1}{R_2}$ flowing from ground into the node $v_x$: the sum $i_n+i_2$ will flow into the diodes as $i_d =i_n(1+\frac{R_1}{R_2})$. In the worst case, the opamp can pull its output to its negative rail ($-12V$). With two diode drops adding $\sim 3.4V$ and limiting the current in the LEDs to 10mA such that the drop across the current limiting resistor is $4.7V$ (dissipates $\sim 50mW$), $v_x$ can reach... drum roll... $-3.9V$. 
+A current $i_n$ flows through $R_1$ such that $V_x = -I_n R_1$ (it will be limited to $V_x \geq -V_z\, (= -3.9V)$ by the Zener diode). $R_2$ will then have current $I_2 = I_n\frac{R_1}{R_2}$ flowing from ground into the node $v_x$: the sum $i_n+i_2$ will flow into the diodes as $I_d =I_n(1+\frac{R_1}{R_2})$. In the worst case, the opamp can pull its output to its negative rail ($-12V$). With two diode drops adding $\sim 3.4V$ and limiting the current in the LEDs to 10mA such that the drop across the current limiting resistor is $4.7V$ (dissipates $\sim 50mW$), $v_x$ can reach... drum roll... $-3.9V$. 
+
+#### Zener Diode Activation
 
 How does this circuit end up driving $>1mA$ through the LEDs? At the summing input, peak voltages should not exceed $\sim 10V$, corresponding to currents of $\sim 100\mu A$. Depending on the choice of $R_1$ and $R_2$, the current through $R_1$ may be sufficient to drive the voltage below $ \sim -4V$ while the LEDs are on, and the opamp will reach it's maximum (negative) output voltage. At this point, the opamp will stop behaving ideally: $v_n$ will increase (balancing the input current from the summing network with the current drawn through $R_1$) while the Zener diode will act like an "ideal" $-3.9V$ source, providing current that will be sunk at the opamp output. Note: leaving out the Zener shouldn't impact the VCF behaviour, but will limit the "gate" behaviour as the vactrol won't saturate and drive $R$ to a very low value. 
 
-In the reference Buchla-inspired design \[[4](#bergman-35),[5](#natrhythm)\], there is are options to buffer the CV inputs (e.g. two mixable CV inputs are available with one passing through an attenuverter). It doesn't seem necessary to to buffer the CV inputs (Ref. [5](#natrhythm) optionally omits them): although the opamp will leave it's normal operating mode and $v_n$ will stop acting like a virtual ground, the currents involved are in the low 10s of $\mu A$ . 
+#### Choosing $R_1$ and $R_2$
 
+When $I_d>100\mu A$, the resistance of the LDR drops below $10k\Omega $ and the cutoff frequency should be $>7kHz$ (i.e. the LPG is "open"). The other constraint is the current $I_n$ at which $|V_x| = V_z$ (the Zener voltage) and the input voltage threshold that corresponds to that current. Assuming a nominal CV input from a gate signal or LFO has a peak voltage of $5V$ ($V_{pp}=10V$), corresponding to a current $I_n=50\mu A$ (through the $100k\Omega$ input mixing resistor) and assuming a ratio between $R_1$ and $R_2$  of $\sim\frac{1}{2}$, $I_D=75\mu A$, leaving some margin for higher CV levels. Choosing $R_2=100k\Omega$ implies $R_1=50k\Omega$. With this value for $R_1$, $I_{n,thresh.} = \frac{V_z}{R_1}=\frac{3.9V}{50k\Omega} = 78\mu A$ or equivalently a CV level of $7.8V$. Just below this threshold, the diode voltage will be $\sim 110\mu A$, and when the threshold is reached, the Zener diode will activate. 
 
+#### Input Mixing and Filtering
+
+In the reference Buchla-inspired designs \[[4](#bergman-35),[5](#natrhythm)\], there are options to buffer the CV inputs (e.g. two mixable CV inputs are available with one passing through an attenuverter). It doesn't seem necessary to to buffer the CV inputs (Ref. [5](#natrhythm) optionally omits them): although the opamp will leave it's normal operating mode and $v_n$ will stop acting like a virtual ground, the currents involved are in the low 10s of $\mu A$ . 
+
+Another interesting feature in \[[4](#bergman-35),[5](#natrhythm)\] is the input filter.
+
+![CV input filter](./images/lpg_input_filter.png)
+
+$V_n$ is the virtual ground at the inverting terminal of the opamp, so the current that is directed to the branch with the vactrols will be the sum of the currents in the two branches shown in the circuit above:
+$$
+I_n = V_i\left(\frac{1}{R_1 + \frac{1}{sC_1}} + \frac{1}{R_2}\right)=V_i\left(\frac{sC_1(R_1 + R_2) + 1}{sR_1R_2 C_1 + R_2} \right)
+$$
+At low frequencies ($s\to 0$) this reduces to an impedance of $R_2=100k\Omega$ and at high frequencies ($s\to \infty$) it reduces to $R_1\parallel R_2 \simeq 82k\Omega$ with a corner frequency around $170Hz$. This should give a bit of a "pluck" to the filter, briefly opening it a bit more on faster signals.
 
 
 
