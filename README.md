@@ -1,2 +1,3 @@
-# modular-template
-Template repository for synthesizer modules
+# Low Pass Gate
+
+Buchla-style VCA and Sallen-Key VCF with vactrols.
