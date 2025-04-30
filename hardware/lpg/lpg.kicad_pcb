@@ -1431,7 +1431,7 @@
 			)
 		)
 		(property "Value" "10u"
-			(at 1 3.75 360)
+			(at 1 3.75 0)
 			(layer "F.Fab")
 			(uuid "1f0cea7e-296a-47c5-909d-ebac3f221b92")
 			(effects
@@ -2729,7 +2729,7 @@
 			(uuid "71e07ba0-feee-4790-a008-a3f4230393f4")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 1 0 360)
+			(at 1 0 0)
 			(layer "F.Fab")
 			(uuid "645c56dd-1d87-480e-945e-9b6caa5c82cc")
 			(effects
@@ -3221,7 +3221,7 @@
 			)
 		)
 		(property "Value" "4M7"
-			(at 1.27 1.92 360)
+			(at 1.27 1.92 0)
 			(layer "F.Fab")
 			(uuid "7ac271d0-2eb9-4074-8f4b-2a7ee795208b")
 			(effects
@@ -3358,7 +3358,7 @@
 			(uuid "b06ac006-f70f-41b9-b520-8b4c0f2920e5")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 1.27 -1.92 360)
+			(at 1.27 -1.92 0)
 			(layer "F.Fab")
 			(uuid "dfe39f98-a26a-4f29-903b-5df3df373b1b")
 			(effects
@@ -7319,7 +7319,7 @@
 		(descr "Resistor, Axial_DIN0207 series, Axial, Vertical, pin pitch=2.54mm, 0.25W = 1/4W, length*diameter=6.3*2.5mm^2, http://cdn-reichelt.de/documents/datenblatt/B400/1_4W%23YAG.pdf")
 		(tags "Resistor Axial_DIN0207 series Axial Vertical pin pitch 2.54mm 0.25W = 1/4W length 6.3mm diameter 2.5mm")
 		(property "Reference" "R23"
-			(at 5.109 0 360)
+			(at 5.109 0 0)
 			(layer "F.SilkS")
 			(uuid "85931ca1-4528-47a2-aa56-74455f126602")
 			(effects
@@ -7330,7 +7330,7 @@
 			)
 		)
 		(property "Value" "10"
-			(at 1.27 2.37 360)
+			(at 1.27 2.37 0)
 			(layer "F.Fab")
 			(uuid "de7e0dc3-a6a1-4e14-a4e2-5b88cf34385b")
 			(effects
@@ -7467,7 +7467,7 @@
 			(uuid "3032a70b-a4ee-4fa7-a306-3fd287d0829c")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 1.27 -2.37 360)
+			(at 1.27 -2.37 0)
 			(layer "F.Fab")
 			(uuid "77bf99da-9ecc-48c3-b7b3-7db454a48d9d")
 			(effects
@@ -19698,6 +19698,42 @@
 			)
 			(justify left bottom)
 		)
+	)
+	(dimension
+		(type orthogonal)
+		(locked yes)
+		(layer "Cmts.User")
+		(uuid "7413610a-3afa-4767-abea-8530bffff07e")
+		(pts
+			(xy 106.5 103.5) (xy 106.5 85)
+		)
+		(height -11.2)
+		(orientation 1)
+		(gr_text "18.5000 mm"
+			(locked yes)
+			(at 94.15 94.25 90)
+			(layer "Cmts.User")
+			(uuid "7413610a-3afa-4767-abea-8530bffff07e")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(format
+			(prefix "")
+			(suffix "")
+			(units 3)
+			(units_format 1)
+			(precision 4)
+		)
+		(style
+			(thickness 0.1)
+			(arrow_length 1.27)
+			(text_position_mode 0)
+			(extension_height 0.58642)
+			(extension_offset 0.5) keep_text_aligned)
 	)
 	(dimension
 		(type orthogonal)
