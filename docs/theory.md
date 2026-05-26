@@ -1,16 +1,14 @@
-# Theory of Operation
+# Design
 
 ## Sallen-Key Filter
 
 The Sallen-Key filter topology results in a second order filter. In a low-pass configuration, it's often presented in a textbook \[[1](#schaumann)\] as 
 
-![Sallen-Key Circuit](./images/sallen_key_textbook.png)
-
-
+![Sallen-Key Circuit](./assets/images/sallen_key_textbook.png){: width="640"}
 
 In this structure, the gain $K$ is set by the resistor divider $R_3$ & $R_4$  in the feedback path of the opamp. In this non-inverting configuration, the gain is $K=1 + \frac{R_3}{R_4}$. For musical applications, it's helpful to decouple the gain from the buffering behaviour in the opamp \[[2](#lanterman-L26)\] (in the same lecture, Aaron Lanterman illustrates a second variation of the Sallen-Key with an additional buffer, which he labels the "Bach" variation -- the original is more relevant here as it maps to the Buchla implementation for the low pass gate):
 
-![Sallen-Key Diagram](./images/sallen_key_lpf_K.png)
+![Sallen-Key Diagram](./assets/images/sallen_key_lpf_K.png){: width="640"}
 
 The canonical transfer function for the LPF is 
 
@@ -48,19 +46,19 @@ The Buchla 292 low-pass gate features a Sallen-Key filter with voltage controlle
 
 The first section is the input buffer with optional 2x gain. Here, $R_1$ provides DC input impedance, $C_1$ blocks DC for audio signals and forms a high-pass with $R_2$ (cutoff < 2Hz). The first opamp is configured as a non-inverting gain of 1 (buffer) or 2: if the switch is closed such that $R_3$ is connected to ground, a gain of 2 is realized.
 
-![Input stage](./images/input_stage.png)
+![Input stage](./assets/images/input_stage.png){: width="640"}
 
 Next is the filter stage. Here $v_{if}$ comes from the output of the input buffer/gain. 
 
-![Filter stage](./images/filter_stage.png)
+![Filter stage](./assets/images/filter_stage.png){: width="640"}
 
 The filter stage can be simplified by replacing the vactrols with resistors $R$ and cleaning up the switches.
 
-![Simplified filter stage](./images/filter_stage_simplified.png)
+![Simplified filter stage](./assets/images/filter_stage_simplified.png){: width="640"}
 
 $C_2$ can be neglected (high cutoff LPF). In addition $R_6$ can be neglected relative to $R_5$ when configured as a VCA and a low cutoff HPF to remove charge from $C_4$ when $R\to \infty$. $R_8$ is present to provide a minimum output impedance and can be ignored for this analysis. Finally, the opamp in the feedback path of the Sallen-Key provides gain $1\leq K\leq 2$ for the resonance, and can be simplified schematically.
 
-![Reduced filter stage](./images/filter_stage_reduced.png)
+![Reduced filter stage](./assets/images/filter_stage_reduced.png){: width="640"}
 
 With the VCF switch closed, the formulas for the Sallen-Key filter apply ( $R_5$ can be neglected: VCF and VCA cannot be closed simultaneously). 
 
@@ -81,15 +79,15 @@ The last configuration is "both" or "combo" mode: the input stage has unity gain
 
 I started with a homemade vactrol: red LED + LDR in two layers of heat shrink. The diode voltage for the LED is 1.68V. Assuming a constant diode drop, the measured response for the "vactrol" is plotted below.
 
-![Vactrol response](./images/vactrol_response.png)
+![Vactrol response](./assets/images/vactrol_response.png){: width="640"}
 
 The vactrols are connected in series to make the $R$-$R$ pair in the Sallen-Key filter. From the perspective of the driving circuit \[[5](#natrhythm)\], the vactrols appear as two LEDs in series. A $470\Omega$ resistor is added in series after the cathodes to limit current. A resistor divider circuit moderates the voltage that can appear across the LEDs and current-limiting resistor, and this voltage is also clamped by a 3.9V Zener diode (note that the voltage increases starting from the output of the opamp). An additional branch can be added in parallel with the switch SW1 to absorb some current, which will increase the $R$ of the vactrols and reduce the cutoff frequency/gain in the VCF/VCA. This is labeled "deep" mode \[[5](#natrhythm)\].
 
-![Vactrol drive circuit](./images/vactrol_drive_circuit.png)
+![Vactrol drive circuit](./assets/images/vactrol_drive_circuit.png){: width="640"}
 
 The opamp is configured as an inverting amplifier: the inverting input is a virtual ground. Neglecting the secondary branch, we can analyze the current into the LEDs.
 
-![Simplified vactrol drive circuit](./images/vactrol_drive_simplified.png)
+![Simplified vactrol drive circuit](./assets/images/vactrol_drive_simplified.png){: width="640"}
 
 A current $i_n$ flows through $R_1$ such that $V_x = -I_n R_1$ (it will be limited to $V_x \geq -V_z\, (= -3.9V)$ by the Zener diode). $R_2$ will then have current $I_2 = I_n\frac{R_1}{R_2}$ flowing from ground into the node $v_x$: the sum $i_n+i_2$ will flow into the diodes as $I_d =I_n(1+\frac{R_1}{R_2})$. In the worst case, the opamp can pull its output to its negative rail ($-12V$). With two diode drops adding $\sim 3.4V$ and limiting the current in the LEDs to 10mA such that the drop across the current limiting resistor is $4.7V$ (dissipates $\sim 50mW$), $v_x$ can reach... drum roll... $-3.9V$. 
 
@@ -107,7 +105,7 @@ In the reference Buchla-inspired designs \[[4](#bergman-35),[5](#natrhythm)\], t
 
 Another interesting feature in \[[4](#bergman-35),[5](#natrhythm)\] is the input filter.
 
-![CV input filter](./images/lpg_input_filter.png)
+![CV input filter](./assets/images/lpg_input_filter.png){: width="480"}
 
 $V_n$ is the virtual ground at the inverting terminal of the opamp, so the current that is directed to the branch with the vactrols will be the sum of the currents in the two branches shown in the circuit above:
 
@@ -116,6 +114,23 @@ I_n = V_i\left(\frac{1}{R_1 + \frac{1}{sC_1}} + \frac{1}{R_2}\right)=V_i\left(\f
 $$
 
 At low frequencies ($s\to 0$) this reduces to an impedance of $R_2=100k\Omega$ and at high frequencies ($s\to \infty$) it reduces to $R_1\parallel R_2 \simeq 82k\Omega$ with a corner frequency around $170Hz$. This should give a bit of a "pluck" to the filter, briefly opening it a bit more on faster signals.
+
+## Make Your Own Vactrols
+
+A Vactrol is just the trade name for an optocoupler, which combines an LED with phototransistor or LDR (photoresistor). To make one, take 
+
+* an LED (which you probably already have) and
+* an LDR (which you can buy cheap and quick off of Amazon), 
+* position the LED facing the LDR separated by a small space
+* hold them in place by wrapping a short length of electrical tape around them to make a small tube
+* put heat shrink around the outside and apply heat (the heat shrink should extend to cover the leads and the back of the LDR & LED -- this is important to avoid ambient light from getting in)
+* double up the heat shrink with a second layer (again: prevent ambient light from getting in)
+
+There's a good [Instructable](https://www.instructables.com/How-to-Make-a-Optocoupler-Vactrol/) that illustrates it.
+
+## Pluck Circuit
+
+The pluck circuit is based on a 555 in a [one-shot (monostable) configuration](https://www.electronics-tutorials.ws/waveforms/555_timer.html). This is triggered by a simple capacitively coupled BJT inverter (note to self: the base-emitter junction of the NPN should be protected by a diode to avoid breakdown for negative voltages). This acts as an edge detector and sends a short inverted pulse to the trigger input of the 555 on a rising edge. 
 
 ## References
 

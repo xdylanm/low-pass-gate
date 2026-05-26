@@ -31,13 +31,20 @@ fp-lib-table
 
 # Exported BOM files
 *.xml
-*.csv
 
 # Exported PCB files (Plots)
 hardware/plots/
 
 # Python
 .venv/
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
 
-# Sphinx
-docs/build/
+# MkDocs
+site/
+.cache/
